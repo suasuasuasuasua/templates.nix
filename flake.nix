@@ -29,7 +29,7 @@
     {
       templates = {
         python = {
-          path = "./python";
+          path = ./python;
           description = "Python template, using poetry2nix";
           welcomeText = ''
             # Getting started
@@ -38,7 +38,7 @@
           '';
         };
         trivial = {
-          path = "./trivial";
+          path = ./trivial;
           description = "trivial template which runs hello world";
           welcomeText = ''
             # Getting started
@@ -84,15 +84,6 @@
             check-merge-conflicts.enable = true;
             end-of-file-fixer.enable = true;
             trim-trailing-whitespace.enable = true;
-
-            # Python
-            poetry-check.enable = true;
-            black.enable = true;
-            isort = {
-              enable = true;
-              settings.profile = "black";
-            };
-            autoflake.enable = true;
           };
         };
       });
