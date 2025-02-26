@@ -28,6 +28,16 @@
     in
     {
       templates = {
+        default = self.templates.trivial;
+
+        trivial = {
+          path = ./trivial;
+          description = "trivial template which runs hello world";
+          welcomeText = ''
+            # Getting started
+            - Run `nix run`
+          '';
+        };
         python = {
           path = ./python;
           description = "Python template, using poetry2nix";
@@ -37,17 +47,7 @@
             - Run `poetry run python -m sample_package`
           '';
         };
-        trivial = {
-          path = ./trivial;
-          description = "trivial template which runs hello world";
-          welcomeText = ''
-            # Getting started
-            - Run `nix run`
-          '';
-        };
       };
-
-      defaultTemplate = self.templates.trivial;
 
       #  for `nix fmt`
       formatter = forAllSystems (
