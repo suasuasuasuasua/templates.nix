@@ -1,0 +1,3 @@
+# Trivial
+
+Basic flake config
