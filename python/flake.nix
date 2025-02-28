@@ -12,7 +12,7 @@
       pre-commit-hooks,
       treefmt-nix,
       ...
-    }@inputs:
+    }:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -75,7 +75,7 @@
         formatting = (
           (pkgs: treefmtEval.${pkgs.system}.config.build.check) nixpkgs.legacyPackages.${system}
         );
-        pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+        pre-commit-check = pre-commit-hooks.lib.${system}.run {
           src = ./.;
           hooks = {
             # Nix
