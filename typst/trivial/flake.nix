@@ -47,16 +47,6 @@
             - Run `poetry run python -m sample_package`
           '';
         };
-        typst = {
-          trivial = {
-            path = ./typst/trivial;
-            description = "typst template";
-            welcomeText = ''
-              # Getting started
-              - Run `typst watch main.typ` to watch and compile the document
-            '';
-            };
-        };
       };
 
       #  for `nix fmt`
@@ -68,6 +58,12 @@
         default = pkgs.${system}.mkShellNoCC {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
           buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+
+          packages = with pkgs.${system}; [
+            typst
+            typstyle
+            # TODO: add any other packages you need!
+          ];
         };
       });
 
