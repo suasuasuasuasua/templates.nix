@@ -21,10 +21,10 @@
         "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      pkgs = forAllSystems (system: nixpkgs.legacyPackages.${system});
+      pkgsFor = forAllSystems (system: nixpkgs.legacyPackages.${system});
 
       # Eval the treefmt modules from ./treefmt.nix
-      treefmtEval = forAllSystems (system: (treefmt-nix.lib.evalModule pkgs.${system} ./treefmt.nix));
+      treefmtEval = forAllSystems (system: (treefmt-nix.lib.evalModule pkgsFor.${system} ./treefmt.nix));
     in
     {
       templates = {
@@ -43,32 +43,25 @@
           description = "Python template, using poetry2nix";
           welcomeText = ''
             # Getting started
-            - Run `nix develop` - Run `poetry run python -m sample_package`
-          '';
-        };
-        typst = {
-          path = ./typst;
-          description = "typst template";
-          welcomeText = ''
-            # Getting started
-            - Run `typst watch main.typ` to watch and compile the document
+            - Run `nix develop`
+            - Run `poetry run python -m sample_package`
           '';
         };
       };
 
       #  for `nix fmt`
-      formatter = forAllSystems (system: treefmtEval.${pkgs.${system}.system}.config.build.wrapper);
+      formatter = forAllSystems (system: treefmtEval.${pkgsFor.${system}.system}.config.build.wrapper);
 
       devShells = forAllSystems (system: {
         default = import ./shell.nix {
           inherit self;
-          pkgs = pkgs.${system};
+          pkgs = pkgsFor.${system};
         };
       });
 
       checks = forAllSystems (system: {
         # for `nix flake check`
-        formatting = treefmtEval.${pkgs.${system}.system}.config.build.check self;
+        formatting = treefmtEval.${pkgsFor.${system}}.config.build.check;
         pre-commit-check = git-hooks.lib.${system}.run {
           src = ./.;
           imports = [ ./git-hooks.nix ];
