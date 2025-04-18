@@ -1,0 +1,28 @@
+PROJECT_NAME := "helloworld"
+BUILD_DIR := "build"
+
+default:
+  @just --list
+
+setup-release:
+  mkdir -p build
+  cd build
+  cmake -DCMAKE_BUILD_TYPE=Release -S . -B {{BUILD_DIR}}
+
+setup-debug:
+  mkdir -p build
+  cd build
+  cmake -DCMAKE_BUILD_TYPE=Debug -S . -B {{BUILD_DIR}}
+
+build:
+  cmake --build {{BUILD_DIR}} --parallel
+
+clean:
+  rm -rf {{BUILD_DIR}}
+
+run:
+  ./build/src/{{PROJECT_NAME}}
+
+fmt:
+  clang-format -i **/*.cpp
+  clang-format -i **/*.h
